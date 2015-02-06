@@ -474,10 +474,12 @@
   # "sub" is the publish handler object which (the "this" object when the function passed to Meteor.publish is called)
   
   publish: (page, sub) ->
-    check page, Number
+    check page, Match.OneOf Number, undefined, String
     check sub, Match.Where (s) ->
       s.ready?
     cid = sub.connection.id
+    
+    return [] if typeof page isnt 'number'
     
     # Create get and set functions for this specific connection (the settings will end up in the @userSettings,
     # stored in an object indexed under the collection id)
